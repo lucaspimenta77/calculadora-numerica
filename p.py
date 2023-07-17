@@ -1,38 +1,37 @@
-def convert_number(numero, base_entrada, base_saida):
+def to_decimal(numero, base):
     try:
-        numero_decimal = int(numero, base_entrada)
-
-        if base_saida == 2:
-            numero_convertido = bin(numero_decimal)[2:]
-            nome_base = "binário"
-        elif base_saida == 10:
-            numero_convertido = str(numero_decimal)
-            nome_base = "decimal"
-        elif base_saida == 16:
-            numero_convertido = hex(numero_decimal)[2:].upper()
-            nome_base = "hexadecimal"
-        elif base_saida == 8:
-            numero_convertido = oct(numero_decimal)[2:]
-            nome_base = "octal"
-        else:
-            print("Erro: Base de saída inválida.")
-            return
-
-        print(
-            f"O número {numero} na base {base_entrada} foi convertido para a base {base_saida} ({nome_base}): {numero_convertido}"
-        )
-
+        decimal = int(numero, base)
     except ValueError:
-        print("Erro: O número fornecido não está de acordo com a base de entrada.")
+        print('O número informado é inválido')
+        return None
+    return decimal
 
+def to_base(decimal, base):
+    digitos = '0123456789ABCDEF'
+    resultado = ''
+    if decimal == 0:
+        return '0'
+    while decimal > 0:
+        resultado = digitos[decimal % base] + resultado
+        decimal = decimal // base
+    return resultado
 
-base_entrada = int(input("Digite a base de entrada (2, 8, 10 ou 16): "))
-base_saida = int(input("Digite a base de saída (2, 8, 10 ou 16): "))
+def primeiro():
+    try:
+        numero = input('Digite um número: ')
+        base_entrada = int(input('Digite a base de entrada (2 para binário, 8 para octal, 10 para decimal, 16 para hexadecimal): '))
+        base_saida = int(input('Digite a base de saída (2 para binário, 8 para octal, 10 para decimal, 16 para hexadecimal): '))
+    except ValueError:
+        print("Entrada inválida")
+        return
+    
+    decimal = to_decimal(numero, base_entrada)
+    if decimal is None:
+        return
+    if base_saida == 10:
+        print(f'Número convertido para base decimal: {decimal}')
+    else:
+        numero_convertido = to_base(decimal, base_saida)
+        print(f'Número convertido para base {base_saida}: {numero_convertido}')
 
-bases_validas = [2, 8, 10, 16]
-if base_entrada not in bases_validas or base_saida not in bases_validas:
-    print("Erro: As bases devem ser 2, 8, 10 ou 16.")
-else:
-    numero = input(f"Digite o número na base {base_entrada}: ")
-
-    convert_number(numero, base_entrada, base_saida)
+primeiro()
